@@ -3,15 +3,17 @@ package io.pivotal.pal.tracker;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class InMemoryTimeEntryRepository implements TimeEntryRepository {
-    private HashMap<Long, TimeEntry> timeEntries = new HashMap<>();
+    private final Map<Long, TimeEntry> timeEntries = new HashMap<>();
 
-    private long currentId = 1L;
+    private AtomicLong currentId = new AtomicLong(1L);
 
     @Override
     public TimeEntry create(TimeEntry timeEntryToCreate) {
-        Long id = currentId++;
+        long id = currentId.getAndIncrement();
 
         TimeEntry newTimeEntry = new TimeEntry(
                 id,
